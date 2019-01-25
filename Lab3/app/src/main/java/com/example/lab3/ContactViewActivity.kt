@@ -30,38 +30,46 @@ class ContactViewActivity : AppCompatActivity() {
         currentNum.text = contactos.currentContact.telefono
 
         val botonRegresar = findViewById<Button>(R.id.buttonBack)
-        botonRegresar.setOnClickListener { val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)}
+        botonRegresar.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
 
         //No funciona el permission, no esta usando lo que se importo
         /**currentNum.setOnClickListener(View.OnClickListener {
-            val callIntent = Intent(Intent.ACTION_CALL)
-            callIntent.data = Uri.parse("tel:${currentNum.text}")
+        val callIntent = Intent(Intent.ACTION_CALL)
+        callIntent.data = Uri.parse("tel:${currentNum.text}")
 
-            if (ActivityCompat.checkSelfPermission(
-                    this@ContactViewActivity,
-                    CALL_PHONE
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return@OnClickListener
-            }
-            startActivity(callIntent)
+        if (ActivityCompat.checkSelfPermission(
+        this@ContactViewActivity,
+        CALL_PHONE
+        ) != PackageManager.PERMISSION_GRANTED
+        ) {
+        return@OnClickListener
+        }
+        startActivity(callIntent)
         })**/
         currentNum.setOnClickListener {
             val intent = Intent(Intent.ACTION_DIAL)
-            intent.data = Uri.parse("tel:"+currentNum.text.toString())
+            intent.data = Uri.parse("tel:" + currentNum.text.toString())
             startActivity(intent)
         }
 
 
 
-        currentMail.setOnClickListener { val intent = Intent(this, MailActivity::class.java)
-        startActivity(intent)}
+        currentMail.setOnClickListener {
+            val intent = Intent(Intent.ACTION_SENDTO)
+            intent.type = "text/html"
+            intent.data = Uri.parse("mailto:" + currentMail.text.toString())
+            intent.putExtra(Intent.EXTRA_EMAIL, currentMail.text.toString())
+
+            startActivity(Intent.createChooser(intent, "Send email to"))
+            sendBroadcast(intent)
 
 
+        }
     }
-
     /**protected fun sendEmail() {
         Log.i("Send email", "")
         val TO = arrayOf("")
