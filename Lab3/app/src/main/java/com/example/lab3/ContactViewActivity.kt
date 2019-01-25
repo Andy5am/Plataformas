@@ -1,6 +1,7 @@
 package com.example.lab3
 
 import android.Manifest
+import android.Manifest.permission.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -34,19 +35,24 @@ class ContactViewActivity : AppCompatActivity() {
 
 
         //No funciona el permission, no esta usando lo que se importo
-        currentNum.setOnClickListener(View.OnClickListener {
+        /**currentNum.setOnClickListener(View.OnClickListener {
             val callIntent = Intent(Intent.ACTION_CALL)
             callIntent.data = Uri.parse("tel:${currentNum.text}")
 
             if (ActivityCompat.checkSelfPermission(
                     this@ContactViewActivity,
-                    Manifest.permission.CALL_PHONE
+                    CALL_PHONE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return@OnClickListener
             }
             startActivity(callIntent)
-        })
+        })**/
+        currentNum.setOnClickListener {
+            val intent = Intent(Intent.ACTION_DIAL)
+            intent.data = Uri.parse("tel:"+currentNum.text.toString())
+            startActivity(intent)
+        }
 
 
 
