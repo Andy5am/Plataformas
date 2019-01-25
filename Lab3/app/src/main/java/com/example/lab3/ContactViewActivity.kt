@@ -1,5 +1,6 @@
 package com.example.lab3
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -8,10 +9,6 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.widget.Button
 import android.widget.TextView
-import java.util.jar.Manifest
-import android.Manifest.permission
-import android.Manifest.permission.CALL_PHONE
-import android.R.attr.button
 import android.view.View
 
 
@@ -35,20 +32,51 @@ class ContactViewActivity : AppCompatActivity() {
         botonRegresar.setOnClickListener { val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)}
 
-        val botonllamar = findViewById<Button>(R.id.buttonLlamada)
 
-        botonllamar.setOnClickListener(View.OnClickListener {
+        //No funciona el permission, no esta usando lo que se importo
+        currentNum.setOnClickListener(View.OnClickListener {
             val callIntent = Intent(Intent.ACTION_CALL)
-            callIntent.data = Uri.parse("tel:0377778888")
+            callIntent.data = Uri.parse("tel:${currentNum.text}")
 
             if (ActivityCompat.checkSelfPermission(
                     this@ContactViewActivity,
-                    android.Manifest.permission.CALL_PHONE
+                    Manifest.permission.CALL_PHONE
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return@OnClickListener
             }
             startActivity(callIntent)
         })
+
+
+
+        currentMail.setOnClickListener { val intent = Intent(this, MailActivity::class.java)
+        startActivity(intent)}
+
+
     }
+
+    /**protected fun sendEmail() {
+        Log.i("Send email", "")
+        val TO = arrayOf("")
+        val CC = arrayOf("")
+        val emailIntent = Intent(Intent.ACTION_SEND)
+
+        emailIntent.data = Uri.parse("mailto:")
+        emailIntent.type = "text/plain"
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO)
+        emailIntent.putExtra(Intent.EXTRA_CC, CC)
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject")
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here")
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."))
+            finish()
+            Log.i("Finished sending email.", "")
+        } catch (ex: android.content.ActivityNotFoundException) {
+            Toast.makeText(this@ContactViewActivity, "There is no email client installed.", Toast.LENGTH_SHORT).show()
+        }
+
+    }**/
+
 }
